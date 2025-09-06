@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Board</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        h1 { color: #333; }
+        .message { border: 1px solid #ccc; padding: 10px; margin: 10px 0; background-color: #fff; border-radius: 5px; }
+        .tag { font-weight: bold; color: #007bff; }
+        .timestamp { color: #666; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <h1>Uploaded Messages</h1>
+    <div id="messages"></div>
+
+    <script>
+        const API_URL = '/api/messages';
+
+        function fetchMessages() {
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('messages');
+                    container.innerHTML = '';
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'message';
+                        div.innerHTML = `<span class="tag">[${item.tag}]</span> ${item.message} <small class="timestamp">(${item.timestamp})</small>`;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        fetchMessages();
+        setInterval(fetchMessages, 5000);
+    </script>
+</body>
+</html>
